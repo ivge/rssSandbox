@@ -11,8 +11,8 @@ namespace rssSandbox.DTO
     /// </summary>
     public class UserFeedDTO
     {
-        public string Name { get; set; }
-        public Guid ID { get; set; }
-        public HashSet<RSSFeed> SubscribedFeeds { get; set; }
+        public string Name;
+        public Guid ID;
+        public HashSet<Feed> SubscribedFeeds;
     }
 }
