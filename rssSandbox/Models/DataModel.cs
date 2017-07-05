@@ -8,11 +8,11 @@ namespace rssSandbox.Models
 {
     public static class DataModel
     {
-        public static HashSet<RSSFeed> RSSFeeds = new HashSet<RSSFeed>()
+        public static HashSet<Feed> Feeds = new HashSet<Feed>()
         {
-            new RSSFeed("Meduza", new Uri(@"https://meduza.io/rss/all"))/*,
+            new RSSFeed("Meduza", new Uri(@"https://meduza.io/rss/all")),
             new RSSFeed("ЛІГА.Новости", new Uri(@"http://news.liga.net/all/rss.xml")),
-            new RSSFeed("ЛІГА.Бизнес", new Uri(@"http://biz.liga.net/all/rss.xml"))*/
+            new RSSFeed("ЛІГА.Бизнес", new Uri(@"http://biz.liga.net/all/rss.xml"))
         };
 
         public static  List<User> Users = new List<User>()

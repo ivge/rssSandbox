@@ -1,18 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using rssSandbox.Entities;
 using rssSandbox.Models;
-using rssSandbox;
-using System.Threading.Tasks;
+using rssSandbox.DTO;
 
 namespace rssSandbox.Controllers
 {
     [RoutePrefix("api/feeds")]
-    public class RSSFeedController : ApiController
+    public class FeedController : ApiController
     {
         [Route("Add")]
         [HttpPost]
@@ -24,7 +22,7 @@ namespace rssSandbox.Controllers
                 response.StatusCode = HttpStatusCode.BadRequest;
                 return response;
             }
-            DataModel.RSSFeeds.Add(newRSSFeed);
+            DataModel.Feeds.Add(newRSSFeed);
             response.StatusCode = HttpStatusCode.OK;
             response.Content = new StringContent("New RSS feed succesfully added.");
             return response;
@@ -32,9 +30,16 @@ namespace rssSandbox.Controllers
 
         [Route("")]
         [HttpGet]
-        public IEnumerable<RSSFeed> GetAll()
+        public IEnumerable<FeedDTO> GetAll()
         {
-            return DataModel.RSSFeeds;
+            var feeds = from f in DataModel.Feeds
+                        select new FeedDTO
+                        {
+                            ID = f.ID,
+                            Name = f.Name,
+                            Url = f.URL
+                        };
+            return feeds;
         }
 
     }

@@ -15,7 +15,7 @@ namespace rssSandbox.Entities
         /// <summary>
         /// list of unique subscribed feeds
         /// </summary>
-        public HashSet<RSSFeed> SubscribedFeeds { get; }
+        public HashSet<Feed> SubscribedFeeds { get; }
 
         /// <summary>
         /// list of all agregated items from all RSS feeds 
@@ -61,7 +61,7 @@ namespace rssSandbox.Entities
 
         public UserFeed()
         {
-            SubscribedFeeds = new HashSet<RSSFeed>();
+            SubscribedFeeds = new HashSet<Feed>();
             Items = new List<SyndicationItem>();
             ID = Guid.NewGuid();
         }
@@ -70,7 +70,7 @@ namespace rssSandbox.Entities
         /// Add new RSS feed to aggregation and update resulting aggregated list. 
         /// </summary>
         /// <param name="newFeed"></param>
-        public void Add(RSSFeed newFeed)
+        public void Add(Feed newFeed)
         {
             SubscribedFeeds.Add(newFeed);
             Update();
@@ -81,7 +81,7 @@ namespace rssSandbox.Entities
         /// Remove feed from aggregation and update resulting aggregated list. 
         /// </summary>
         /// <param name="removeFeed"></param>
-        public void Remove(RSSFeed removeFeed)
+        public void Remove(Feed removeFeed)
         {
             SubscribedFeeds.Remove(removeFeed);
             Update();
@@ -97,7 +97,7 @@ namespace rssSandbox.Entities
             foreach (var feed in SubscribedFeeds)
                 foreach (var item in feed.Items)
                 {
-                    list.Add(item);
+                    list.Add((SyndicationItem)item);
                 }
             Items.AddRange(list.OrderByDescending(i => i.PublishDate).Take(Settings.MaxItemsInFeed));
         }

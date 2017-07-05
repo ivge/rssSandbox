@@ -120,7 +120,7 @@ namespace rssSandbox.Controllers
             if (userFeed == null)
                 return BadRequest("Users feed not found!");
 
-            var rssFeed = DataModel.RSSFeeds.Where(_rssfeed => _rssfeed.ID == request.rssFeedID).FirstOrDefault();
+            var rssFeed = DataModel.Feeds.Where(_rssfeed => _rssfeed.ID == request.rssFeedID).FirstOrDefault();
             if (rssFeed == null)
                 return BadRequest("New feed not found!");
             else userFeed.Add(rssFeed);

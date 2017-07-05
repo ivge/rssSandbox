@@ -8,37 +8,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace rssSandbox.Entities
 {
-    public class RSSFeed
+    public class RSSFeed : Feed
     {
-        private Uri url;
-
-        [Required]
-        public Uri URL
-        {
-            get
-            {
-                return url;
-            }
-            set
-            {
-                url = value;
-                UpdateItems();
-            }
-        }
-
-        [Required]
-        public string Name { get; set; }
-
-        public DateTime Updated { get; set; }
-
-        public Guid ID;
-
-        [NonSerialized]
-        public List<SyndicationItem> Items;
+        /*[NonSerialized]
+        public List<SyndicationItem> Items;*/
 
         public RSSFeed()
         {
-            Items = new List<SyndicationItem>();
+            ///!!!!!List<SyndicationItem>
+            Items = new List<object>();
             ID = Guid.NewGuid();
 
         }
@@ -50,7 +28,7 @@ namespace rssSandbox.Entities
 
         }
 
-        public void UpdateItems()
+        public override void UpdateItems()
         {
             this.Items.Clear(); 
             using (XmlReader reader = XmlReader.Create(this.URL.AbsoluteUri))

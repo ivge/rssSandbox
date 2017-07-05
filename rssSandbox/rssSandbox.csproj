@@ -115,14 +115,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\RSSFeedController.cs" />
+    <Compile Include="Controllers\FeedController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\Helper\AddRSSFeedtoUserFeed.cs" />
+    <Compile Include="DTO\FeedDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
     <Compile Include="DTO\UserFeedDTO.cs" />
-    <Compile Include="Entities\UserFeed.cs" />
+    <Compile Include="Entities\Feed.cs" />
     <Compile Include="Entities\FeedItem.cs" />
-    <Compile Include="Entities\RSSFeed.cs" />
+    <Compile Include="Entities\UserFeed.cs" />
+    <Compile Include="Entities\RSS\RSSFeedItem.cs" />
+    <Compile Include="Entities\RSS\RSSFeed.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -136,7 +139,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
