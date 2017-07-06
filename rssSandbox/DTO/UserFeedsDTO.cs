@@ -9,10 +9,10 @@ namespace rssSandbox.DTO
     /// <summary>
     /// This class used to display users feed 
     /// </summary>
-    public class UserFeedDTO
+    public class UserFeedsDTO
     {
         public string Name;
         public Guid ID;
-        public HashSet<Feed> SubscribedFeeds;
+        public IEnumerable<FeedDTO> SubscribedFeeds;
     }
 }

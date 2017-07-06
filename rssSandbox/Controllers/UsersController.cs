@@ -39,18 +39,24 @@ namespace rssSandbox.Controllers
         /// <returns>List of all user feed </returns>
         [Route("{userid:guid}/getfeeds")]
         [HttpGet]
-        public IEnumerable<UserFeedDTO> GetFeeds(Guid userID)
+        public IEnumerable<UserFeedsDTO> GetFeeds(Guid userID)
         {
             var user = DataModel.Users.Where(_user => _user.ID == userID).FirstOrDefault();
             if (user == null)
                 throw new UserNotFoundException("User not found!");
 
-            var feeds = from f in user.Feeds
-                        select new UserFeedDTO
+            var feeds = from uf in user.Feeds
+                        select new UserFeedsDTO
                         {
-                            ID = f.ID,
-                            Name = f.Name,
-                            SubscribedFeeds = f.SubscribedFeeds
+                            ID = uf.ID,
+                            Name = uf.Name,
+                            SubscribedFeeds = from f in uf.SubscribedFeeds
+                                              select new FeedDTO
+                                              {
+                                                  ID = f.ID,
+                                                  Name = f.Name,
+                                                  Url = f.URL  
+                                              }
                         };
 
             return feeds;
@@ -58,7 +64,7 @@ namespace rssSandbox.Controllers
 
         [Route("{userid:guid}/getfeed/{userfeedname}")]
         [HttpGet]
-        public IEnumerable<SyndicationItem> GetFeedItems(Guid userID, string userfeedname)
+        public IEnumerable<UserFeedItemDTO> GetFeedItems(Guid userID, string userfeedname)
         {
             var user = DataModel.Users.Where(_user => _user.ID == userID).FirstOrDefault();
             if (user == null)
@@ -66,8 +72,17 @@ namespace rssSandbox.Controllers
             var userfeed = user.Feeds.Where(_userfeed => _userfeed.Name.Equals(userfeedname, StringComparison.InvariantCulture)).FirstOrDefault();
             if (userfeed == null)
                 throw new UserFeedNotFoundException("Users feed not found!");
-            else
-                return userfeed.Items;
+            var items = from uf in userfeed.Items
+                        select new UserFeedItemDTO
+                        {
+                            Title = uf.Title,
+                            Content = uf.Content,
+                            FetchDate = uf.FetchDate,
+                            URL = uf.URL,
+                            PublishDate = uf.PublishDate,
+                            Source = uf.Source
+                        };
+            return items;
         }
 
         [Route("{userid:guid}/getformattedfeed/{userfeedname}")]
@@ -82,9 +97,7 @@ namespace rssSandbox.Controllers
                 throw new UserFeedNotFoundException("Users feed not found!");
             foreach (var i in userfeed.Items)
             {
-                yield return i.Title.Text + Environment.NewLine +
-                              i.Summary.Text + Environment.NewLine +
-                              i.BaseUri;
+                yield return i.Title;
             }
 
 
@@ -114,15 +127,15 @@ namespace rssSandbox.Controllers
 
             var user = DataModel.Users.Where(_user => _user.ID == request.userID).FirstOrDefault();
             if (user == null)
-                return BadRequest("User not found!");
+                return BadRequest("User not found! Please check users GUID!");
 
             var userFeed = user.Feeds.Where(_userfeed => _userfeed.ID == request.userFeedID).FirstOrDefault();
             if (userFeed == null)
-                return BadRequest("Users feed not found!");
+                return BadRequest("Users feed not found! Please check users feed GUID!");
 
             var rssFeed = DataModel.Feeds.Where(_rssfeed => _rssfeed.ID == request.rssFeedID).FirstOrDefault();
             if (rssFeed == null)
-                return BadRequest("New feed not found!");
+                return BadRequest("New feed not found! Please check new feeds GUID!");
             else userFeed.Add(rssFeed);
 
             return new PostRSSFeedtoUserResponse();

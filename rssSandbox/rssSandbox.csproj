@@ -120,7 +120,8 @@
     <Compile Include="Controllers\Helper\AddRSSFeedtoUserFeed.cs" />
     <Compile Include="DTO\FeedDTO.cs" />
     <Compile Include="DTO\UserDTO.cs" />
-    <Compile Include="DTO\UserFeedDTO.cs" />
+    <Compile Include="DTO\UserFeedItemDTO.cs" />
+    <Compile Include="DTO\UserFeedsDTO.cs" />
     <Compile Include="Entities\Feed.cs" />
     <Compile Include="Entities\FeedItem.cs" />
     <Compile Include="Entities\UserFeed.cs" />

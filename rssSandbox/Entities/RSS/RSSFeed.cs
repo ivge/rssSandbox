@@ -16,7 +16,7 @@ namespace rssSandbox.Entities
         public RSSFeed()
         {
             ///!!!!!List<SyndicationItem>
-            Items = new List<object>();
+            Items = new List<FeedItem>();
             ID = Guid.NewGuid();
 
         }
@@ -36,7 +36,8 @@ namespace rssSandbox.Entities
                 SyndicationFeed feed = SyndicationFeed.Load(reader);
                 foreach (var item in feed.Items)
                 {
-                    this.Items.Add(item);
+                    //this.Items.Add(item);
+                    Items.Add(new RSSFeedItem(feed.Title.Text,item));
                 }
             }
             this.Updated = DateTime.UtcNow;

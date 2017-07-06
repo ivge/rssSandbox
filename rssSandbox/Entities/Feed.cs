@@ -24,7 +24,7 @@ namespace rssSandbox.Entities
 
         public string Name { get; set; }
 
-        public List<object> Items { get; internal set; }
+        public List<FeedItem> Items { get; internal set; }
         public DateTime Updated { get; internal set; }
 
         public abstract void UpdateItems();

@@ -20,8 +20,8 @@ namespace rssSandbox.Entities
         /// <summary>
         /// list of all agregated items from all RSS feeds 
         /// </summary>
-        private List<SyndicationItem> items;
-        public List<SyndicationItem> Items
+        private List<FeedItem> items;
+        public List<FeedItem> Items
         {
             get
             {
@@ -42,11 +42,16 @@ namespace rssSandbox.Entities
         {
             foreach (var feed in SubscribedFeeds)
             {
+                bool updateAggregatedItems = false;
                 if (DateTime.UtcNow - feed.Updated > Settings.CacheInvalidatePeriod)
                 {
                     feed.UpdateItems();
+                    updateAggregatedItems = true;
                 }
+                if(updateAggregatedItems)
+                    this.Update();
             }
+            
         }
 
         /// <summary>
@@ -62,7 +67,7 @@ namespace rssSandbox.Entities
         public UserFeed()
         {
             SubscribedFeeds = new HashSet<Feed>();
-            Items = new List<SyndicationItem>();
+            Items = new List<FeedItem>();
             ID = Guid.NewGuid();
         }
 
@@ -93,11 +98,11 @@ namespace rssSandbox.Entities
         private void Update()
         {
             Items.Clear();
-            var list = new List<SyndicationItem>();
+            var list = new List<FeedItem>();
             foreach (var feed in SubscribedFeeds)
                 foreach (var item in feed.Items)
                 {
-                    list.Add((SyndicationItem)item);
+                    list.Add(item);
                 }
             Items.AddRange(list.OrderByDescending(i => i.PublishDate).Take(Settings.MaxItemsInFeed));
         }
