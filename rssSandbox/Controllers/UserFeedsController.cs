@@ -13,22 +13,32 @@ namespace rssSandbox.Controllers
 {
     public partial class UsersController : ApiController
     {
-        [Route("{userid:guid}/createfeed/{feedname}")]
+        /// <summary>
+        /// Creates new userfeed. 
+        /// </summary>
+        /// <param name="userID">Users GUID</param>
+        /// <param name="feedname">name of a new user feed, should be unique within user feeds list</param>
+        /// <returns></returns>
+        [Route("{userid:guid}/CreateFeed/{feedname}")]
         [HttpPost]
-        public HttpResponseMessage CreateFeed(Guid userID, string feedname)
+        public IHttpActionResult CreateFeed(Guid userID, string feedname)
         {
             var response = new HttpResponseMessage();
             var user = DataModel.Users.Where(_user => _user.ID == userID).FirstOrDefault();
             if (user == null)
                 throw new UserNotFoundException("User not found!");
             user.Feeds.Add(new UserFeed(feedname));
-            response.StatusCode = HttpStatusCode.OK;
-            return response;
+            return Ok();
         }
 
-        [Route("AddRSSFeed")]
+        /// <summary>
+        /// Add feed to a user feed via post request with userID, UserfeedID and new feed ID
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [Route("AddFeed")]
         [HttpPost]
-        public IHttpActionResult AddRSSFeed([FromBody]PostRSSFeedtoUserRequest request)
+        public IHttpActionResult AddFeed([FromBody]PostRSSFeedtoUserRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -43,12 +53,69 @@ namespace rssSandbox.Controllers
             if (userFeed == null)
                 return BadRequest("Users feed not found! Please check users feed GUID!");
 
-            var rssFeed = DataModel.Feeds.Where(_rssfeed => _rssfeed.ID == request.rssFeedID).FirstOrDefault();
-            if (rssFeed == null)
+            var feed = DataModel.Feeds.Where(_rssfeed => _rssfeed.ID == request.rssFeedID).FirstOrDefault();
+            if (feed == null)
                 return BadRequest("New feed not found! Please check new feeds GUID!");
-            else userFeed.Add(rssFeed);
+            else userFeed.Add(feed);
 
             return new PostRSSFeedtoUserResponse();
+        }
+
+
+        /// <summary>
+        /// Adds new feed to user feed 
+        /// </summary>
+        /// <param name="userid">Users ID</param>
+        /// <param name="userfeedname">User feeds ID</param>
+        /// <param name="feedid">Id of a feed you want to add</param>
+        /// <returns>OK() if succesfully added, Badrequest if user, user feed or adding feed is not found</returns>
+        [Route("{userid:guid}/Feeds/{userfeedname}/AddFeed/{feedid:guid}")]
+        [HttpPost]
+        public IHttpActionResult AddFeed(Guid userid, string  userfeedname, Guid feedid)
+        {
+            var user = DataModel.Users.Where(_user => _user.ID == userid).FirstOrDefault();
+            if (user == null)
+                return BadRequest("User not found! Please check users GUID!");
+
+            var userFeed = user.Feeds.Where(_userfeed => _userfeed.Name.Equals(userfeedname, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            if (userFeed == null)
+                return BadRequest("Users feed not found! Please check users feed GUID!");
+
+            var feed = DataModel.Feeds.Where(_rssfeed => _rssfeed.ID == feedid).FirstOrDefault();
+            if (feed == null)
+                return BadRequest("New feed not found! Please check new feeds GUID!");
+            else userFeed.Add(feed);
+
+            return Ok("Feed added!");
+        }
+
+
+        /// <summary>
+        /// remove feed from userfeed
+        /// </summary>
+        /// <param name="userid">Users GUID</param>
+        /// <param name="userfeedname"> User feeds name</param>
+        /// <param name="feedid">GUID of a feed you want to delete </param>
+        /// <returns>OK() if succesfully deleted, 
+        /// Badrequest if user, user feed or deleting feed is not found</returns>
+        [Route("{userid:guid}/Feeds/{userfeedname}/DeleteFeed/{feedid:guid}")]
+        [HttpDelete]
+        public IHttpActionResult DeleteFeed(Guid userid, string userfeedname, Guid feedid)
+        {
+            var user = DataModel.Users.Where(_user => _user.ID == userid).FirstOrDefault();
+            if (user == null)
+                return BadRequest("User not found! Please check users GUID!");
+
+            var userFeed = user.Feeds.Where(_userfeed => _userfeed.Name.Equals(userfeedname, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            if (userFeed == null)
+                return BadRequest("Users feed not found! Please check users feed GUID!");
+
+            var feed = DataModel.Feeds.Where(_rssfeed => _rssfeed.ID == feedid).FirstOrDefault();
+            if (feed == null)
+                return BadRequest("Feed not found! Please check GUID of a feed you trying to delete!");
+            else userFeed.Remove(feed);
+
+            return Ok("Feed deleted!");
         }
 
         /// <summary>
@@ -56,7 +123,7 @@ namespace rssSandbox.Controllers
         /// </summary>
         /// <param name="userID">customer ID(GUID)</param>
         /// <returns>List of all user feed </returns>
-        [Route("{userid:guid}/getfeeds")]
+        [Route("{userid:guid}/Feeds")]
         [HttpGet]
         public IEnumerable<UserFeedsDTO> GetFeeds(Guid userID)
         {
@@ -81,7 +148,7 @@ namespace rssSandbox.Controllers
             return feeds;
         }
 
-        [Route("{userid:guid}/getfeed/{userfeedname}")]
+        [Route("{userid:guid}/Feeds/{userfeedname}")]
         [HttpGet]
         public IEnumerable<UserFeedItemDTO> GetFeedItems(Guid userID, string userfeedname)
         {
@@ -104,7 +171,7 @@ namespace rssSandbox.Controllers
             return items;
         }
 
-        [Route("{userid:guid}/getformattedfeed/{userfeedname}")]
+        [Route("{userid:guid}/Feeds/{userfeedname}/Formatted")]
         [HttpGet]
         public IEnumerable<string> GetFormattedFeedItems(Guid userID, string userfeedname)
         {

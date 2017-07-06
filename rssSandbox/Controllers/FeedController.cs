@@ -6,31 +6,56 @@ using System.Web.Http;
 using rssSandbox.Entities;
 using rssSandbox.Models;
 using rssSandbox.DTO;
+using System;
 
 namespace rssSandbox.Controllers
 {
     [RoutePrefix("api/feeds")]
     public class FeedController : ApiController
     {
-        [Route("Add")]
+        /// <summary>
+        /// Add new RSS feed to globally available list of feeds 
+        /// </summary>
+        /// <param name="newRSSFeed">Name and URL is expected</param>
+        /// <returns></returns>
+        [Route("AddRSS")]
         [HttpPost]
-        public HttpResponseMessage Add([FromBody]RSSFeed newRSSFeed)
+        public IHttpActionResult Add([FromBody]RSSFeed newRSSFeed)
         {
-            var response = new HttpResponseMessage();
             if (!ModelState.IsValid)
-            {
-                response.StatusCode = HttpStatusCode.BadRequest;
-                return response;
-            }
-            DataModel.Feeds.Add(newRSSFeed);
-            response.StatusCode = HttpStatusCode.OK;
-            response.Content = new StringContent("New RSS feed succesfully added.");
-            return response;
+                return BadRequest("Sent data is invalid!");
+            if (DataModel.Feeds.Add(newRSSFeed))
+                return Ok();
+            else
+                return BadRequest("New RSS feed wasn't added, probably already exists!");
         }
 
+        /// <summary>
+        /// Remove Feed from globally available list of feeds. 
+        /// </summary>
+        /// <param name="id">Feed ID</param>
+        /// <returns></returns>
+        [Route("Delete/{feedid:guid}")]
+        [HttpDelete]
+        public IHttpActionResult Delete(Guid feedid)
+        {
+            var feed = DataModel.Feeds.Where(f => f.ID == feedid).FirstOrDefault();
+            if (feed == null)
+                return BadRequest("Feed not found!");
+            else
+            {
+                DataModel.Feeds.Remove(feed);
+                return Ok();
+            }
+        }
+
+        /// <summary>
+        /// Returns globally available list of feeds. 
+        /// </summary>
+        /// <returns>list of Feeds</returns>
         [Route("")]
         [HttpGet]
-        public IEnumerable<FeedDTO> GetAll()
+        public IHttpActionResult GetAll()
         {
             var feeds = from f in DataModel.Feeds
                         select new FeedDTO
@@ -39,7 +64,7 @@ namespace rssSandbox.Controllers
                             Name = f.Name,
                             Url = f.URL
                         };
-            return feeds;
+            return Ok(feeds);
         }
 
     }
