@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ServiceModel.Syndication;
+using System.Text;
 
 namespace rssSandbox.Entities
 {
     public class RSSFeedItem : FeedItem
     {
-
         public RSSFeedItem(string source, string title, string content, Uri url) : base(source, title, content, url) { }
 
         public RSSFeedItem(string source, 
@@ -33,5 +33,14 @@ namespace rssSandbox.Entities
 
         public RSSFeedItem(string source, SyndicationItem syndicationItem) 
             : this(source, syndicationItem.Title, syndicationItem.Summary, syndicationItem.Links, syndicationItem.PublishDate) { }
+
+        override internal void Format(object formatOptions)
+        {
+            var s = new StringBuilder();
+            s.AppendLine(this.Title);
+            s.AppendLine(this.Content);
+            s.AppendFormat("More information: {0}", this.URL);
+            this.FormattedContent = s.ToString();
+        }
     }
 }

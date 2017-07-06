@@ -6,14 +6,28 @@ using System.Web;
 
 namespace rssSandbox.Entities
 {
-    abstract public class FeedItem 
+    abstract public class FeedItem
     {
         public string Source { get; set; }
-        public string Title{ get; set; }
+        public string Title { get; set; }
         public string Content { get; set; }
         public Uri URL { get; set; }
         public DateTime FetchDate { get; set; }
         public DateTime PublishDate { get; set; }
+
+        private string formattedContent;
+        public string FormattedContent
+        {
+            get
+            {
+                this.Format(null);
+                return formattedContent;
+            }
+            set
+            {
+                formattedContent = value;
+            }
+        }
 
         public FeedItem()
         {
@@ -27,6 +41,8 @@ namespace rssSandbox.Entities
             this.Content = content;
             this.URL = url;
         }
+
+        abstract internal void Format(object formatOptions);
 
     }
 }

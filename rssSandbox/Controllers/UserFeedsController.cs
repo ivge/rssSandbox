@@ -116,7 +116,7 @@ namespace rssSandbox.Controllers
                 throw new UserFeedNotFoundException("Users feed not found!");
             foreach (var i in userfeed.Items)
             {
-                yield return i.Title;
+                yield return i.FormattedContent;
             }
         }
     }
