@@ -11,7 +11,7 @@ using System;
 namespace rssSandbox.Controllers
 {
     [RoutePrefix("api/feeds")]
-    public class FeedController : ApiController
+    public class FeedsController : ApiController
     {
         /// <summary>
         /// Add new RSS feed to globally available list of feeds 

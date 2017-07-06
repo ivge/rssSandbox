@@ -115,7 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\FeedController.cs" />
+    <Compile Include="Controllers\FeedsController.cs" />
     <Compile Include="Controllers\UserFeedsController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\Helper\AddRSSFeedtoUserFeed.cs" />
