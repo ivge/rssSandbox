@@ -7,7 +7,7 @@ using System.Web.Http;
 using rssSandbox.Entities;
 using rssSandbox.Models;
 using rssSandbox.DTO;
-
+using System.Security;
 
 namespace rssSandbox.Controllers
 {
@@ -18,7 +18,7 @@ namespace rssSandbox.Controllers
         /// Returns all users.
         /// </summary>
         /// <returns>List of existing users</returns>
-        [Route("getall")]
+        [Route("")]
         [HttpGet]
         public IEnumerable<UserDTO> GetUsers()
         {
@@ -30,5 +30,14 @@ namespace rssSandbox.Controllers
                         };
             return users;
         }
+
+        [Route("Add/{login}/password/{password}")]
+        [HttpPost]
+        public IHttpActionResult CreateUser(string login, string password)
+        {
+            var user = new User(login, password);
+            return Ok(user.ID);
+        }
+
     }
 }
