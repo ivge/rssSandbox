@@ -9,8 +9,7 @@ namespace rssSandbox.Entities
     public class RSSFeedItem : FeedItem
     {
 
-        public RSSFeedItem(string source, string title, string content, Uri url) : base(source, title, content, url)
-        { }
+        public RSSFeedItem(string source, string title, string content, Uri url) : base(source, title, content, url) { }
 
         public RSSFeedItem(string source, 
                            TextSyndicationContent title, 

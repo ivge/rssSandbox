@@ -48,10 +48,10 @@ namespace rssSandbox.Entities
                     feed.UpdateItems();
                     updateAggregatedItems = true;
                 }
-                if(updateAggregatedItems)
+                if (updateAggregatedItems)
                     this.Update();
             }
-            
+
         }
 
         /// <summary>
@@ -70,6 +70,12 @@ namespace rssSandbox.Entities
             Items = new List<FeedItem>();
             ID = Guid.NewGuid();
         }
+
+        public UserFeed(string name) : this()
+        {
+            this.Name = name;
+        }
+
 
         /// <summary>
         /// Add new RSS feed to aggregation and update resulting aggregated list. 
@@ -121,6 +127,23 @@ namespace rssSandbox.Entities
         }
 
         public UserFeedNotFoundException(string message, Exception inner)
+        : base(message, inner)
+        {
+        }
+    }
+
+    public class UserFeedAlreadyExistsException : Exception
+    {
+        public UserFeedAlreadyExistsException()
+        {
+        }
+
+        public UserFeedAlreadyExistsException(string message)
+        : base(message)
+        {
+        }
+
+        public UserFeedAlreadyExistsException(string message, Exception inner)
         : base(message, inner)
         {
         }

@@ -22,9 +22,16 @@ namespace rssSandbox.Entities
             }
         }
 
+        public Feed()
+        {
+            Items = new List<FeedItem>();
+        }
+
         public string Name { get; set; }
 
-        public List<FeedItem> Items { get; internal set; }
+        private List<FeedItem> items;
+
+        public List<FeedItem> Items { get; set; }
         public DateTime Updated { get; internal set; }
 
         public abstract void UpdateItems();

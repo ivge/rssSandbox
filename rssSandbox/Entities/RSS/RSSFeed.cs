@@ -1,44 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Threading.Tasks;
 using System.Xml;
-using System.ComponentModel.DataAnnotations;
 
 namespace rssSandbox.Entities
 {
     public class RSSFeed : Feed
     {
-        /*[NonSerialized]
-        public List<SyndicationItem> Items;*/
-
-        public RSSFeed()
+        public RSSFeed(): base()
         {
-            ///!!!!!List<SyndicationItem>
-            Items = new List<FeedItem>();
-            ID = Guid.NewGuid();
-
+            //this.Items = new List<FeedItem>();
+            this.ID = Guid.NewGuid();
         }
 
         public RSSFeed(string name, Uri url) : this()
         {
             this.Name = name;
             this.URL = url;
-
         }
 
         public override void UpdateItems()
         {
-            this.Items.Clear(); 
+            this.Items.Clear();
             using (XmlReader reader = XmlReader.Create(this.URL.AbsoluteUri))
             {
                 SyndicationFeed feed = SyndicationFeed.Load(reader);
                 foreach (var item in feed.Items)
                 {
-                    //this.Items.Add(item);
-                    Items.Add(new RSSFeedItem(feed.Title.Text,item));
+                    Items.Add(new RSSFeedItem(feed.Title.Text, item));
                 }
+
             }
             this.Updated = DateTime.UtcNow;
         }

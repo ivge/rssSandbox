@@ -43,9 +43,11 @@ namespace rssSandbox.Entities
         /// <summary>
         /// Create new users feed
         /// </summary>
-        public void CreateNewUserFeed()
+        public void CreateNewUserFeed(string name)
         {
-            Feeds.Add(new UserFeed());
+            if (this.Feeds.Any(uf => uf.Name == name))
+                throw new UserFeedAlreadyExistsException();
+            this.Feeds.Add(new UserFeed(name));
         }
     }
 
@@ -65,4 +67,6 @@ namespace rssSandbox.Entities
         {
         }
     }
+
+    
 }
