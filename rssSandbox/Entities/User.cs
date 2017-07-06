@@ -43,11 +43,15 @@ namespace rssSandbox.Entities
         /// <summary>
         /// Create new users feed
         /// </summary>
-        public void CreateNewUserFeed(string name)
+        /// <param name="name">Name for new user feed</param>
+        /// <returns>User feed ID</returns>
+        public Guid CreateNewUserFeed(string name)
         {
-            if (this.Feeds.Any(uf => uf.Name == name))
+            if (this.Feeds.Any(uf => uf.Name.Equals(name,StringComparison.InvariantCultureIgnoreCase)))
                 throw new UserFeedAlreadyExistsException();
-            this.Feeds.Add(new UserFeed(name));
+            var userFeed = new UserFeed(name);
+            this.Feeds.Add(userFeed);
+            return userFeed.ID;
         }
     }
 

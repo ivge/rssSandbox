@@ -27,8 +27,8 @@ namespace rssSandbox.Controllers
             var user = DataModel.Users.Where(_user => _user.ID == userID).FirstOrDefault();
             if (user == null)
                 throw new UserNotFoundException("User not found!");
-            user.Feeds.Add(new UserFeed(feedname));
-            return Ok();
+            var userfeedID = user.CreateNewUserFeed(feedname);
+            return Ok("New user feed succesfully created, ID: " + userfeedID);
         }
 
         /// <summary>
