@@ -28,7 +28,7 @@ namespace rssSandbox.Controllers
             if (user == null)
                 throw new UserNotFoundException("User not found!");
             var userfeedID = user.CreateNewUserFeed(feedname);
-            return Ok("New user feed succesfully created, ID: " + userfeedID);
+            return Ok(userfeedID);
         }
 
         /// <summary>

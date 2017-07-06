@@ -16,7 +16,6 @@ namespace rssSandbox.Controllers
     {
         /// <summary>
         /// Returns all users.
-        /// Using DTO to hide password and lists of aggregated feeds.
         /// </summary>
         /// <returns>List of existing users</returns>
         [Route("getall")]

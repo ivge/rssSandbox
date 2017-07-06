@@ -9,7 +9,6 @@ namespace rssSandbox.Entities
     {
         public RSSFeed(): base()
         {
-            //this.Items = new List<FeedItem>();
             this.ID = Guid.NewGuid();
         }
 

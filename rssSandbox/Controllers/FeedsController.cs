@@ -25,7 +25,7 @@ namespace rssSandbox.Controllers
             if (!ModelState.IsValid)
                 return BadRequest("Sent data is invalid!");
             if (DataModel.Feeds.Add(newRSSFeed))
-                return Ok();
+                return Ok(newRSSFeed.ID);
             else
                 return BadRequest("New RSS feed wasn't added, probably already exists!");
         }
