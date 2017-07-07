@@ -36,6 +36,7 @@ namespace rssSandbox.Controllers
         public IHttpActionResult CreateUser(string login, string password)
         {
             var user = new User(login, password);
+            DataModel.Users.Add(user);
             return Ok(user.ID);
         }
 
